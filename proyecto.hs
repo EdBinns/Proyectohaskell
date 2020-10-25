@@ -1,22 +1,32 @@
-
-
+listaquemada :: [[[String]]]
+listaquemada = [[["e1","p1"],["r1","r2","r3","r4","r5"]],[["e1","p2"],["r1","r2"]],[["e2","p1"],["r1","r2","r3","r4","r5"]],[["e2","p2"],["r1","r2"]]]
+    
+---Función que agrega nuevas respuestas a una lista
 addAnswers ::  String -> [String] -> [String]
 addAnswers x y  = y ++ [x]
 
+
+---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
 
+
+---Función que agrega nuevas encuestas a una lista
 addForms ::  String -> [String] -> [String]
 addForms x y  = y++ [x]
 
+
+---Función que agrega la encuesta completa a una lista
 addCompleteForm :: [String]-> [String] -> [[[String]]]
 addCompleteForm x y = [[x]++[y]]
 input ::  IO String
 input  = do
     getLine
-
+--Función que permite imprimir un mensaje en pantalla
 showMessage :: String -> IO()
 showMessage  x = print  x
+
+--Función que permite ir añadiendo encuestas
 addFormsNames ::Int -> String -> [[[String]]]-> IO [[[String]]]
 addFormsNames x y z =  do
      if (x) /= 0
@@ -94,11 +104,41 @@ addScaleQuestions x y z = do
             addScaleQuestions (x + 1) y newQuestionsList
         else return  z
 
+prueba :: [[String]] -> String-> [[String]]
+prueba x y= do
+    let xd = prueba2 (x !! 0) y
+    if (xd) == []
+         then do
+           []
+         else 
+           [xd] ++ [x !! 1]    
+  
+
+prueba2 ::  [String] -> String-> [String]
+prueba2 x y = 
+    if (x !! 0) == y
+        then do
+            x
+        else
+            []
+
+prueba3 ::  [[[String]]] -> String->  [[[String]]]
+prueba3 x f = do
+    let y = map(\x ->prueba x f ) listaquemada
+    let z =  filter (\e -> e/=[]) y
+    z
+
+
 main :: IO ()
 main = do
-    let forms = addFormsNames 1 " " []
-    x <- (forms)
-    print x
+     --let forms = addFormsNames 1 " " []
+    --x <- (forms)
+    let f = "e2"
+--    let y = map(\x ->prueba x f ) listaquemada
+    let y = prueba3 listaquemada f
+    print listaquemada
+    print y
+
 
 
  
