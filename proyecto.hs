@@ -104,40 +104,81 @@ addScaleQuestions x y z = do
             addScaleQuestions (x + 1) y newQuestionsList
         else return  z
 
-prueba :: [[String]] -> String-> [[String]]
-prueba x y= do
-    let xd = prueba2 (x !! 0) y
-    if (xd) == []
+--Verifica que solo vayan las respuestas de la encuesta seleccionada
+filterByNameForm :: [[String]] -> String-> [[String]]
+filterByNameForm x y= do
+    let nameForm = selectByNameForm (x !! 0) y
+    if (nameForm) == []
          then do
            []
          else 
-           [xd] ++ [x !! 1]    
+           [nameForm] ++ [x !! 1]    
   
 
-prueba2 ::  [String] -> String-> [String]
-prueba2 x y = 
+--Verifica que preguntas le pertenecen a la encuesta seleccionada
+selectByNameForm ::  [String] -> String-> [String]
+selectByNameForm x y = 
     if (x !! 0) == y
         then do
             x
         else
             []
 
-prueba3 ::  [[[String]]] -> String->  [[[String]]]
-prueba3 x f = do
-    let y = map(\x ->prueba x f ) listaquemada
+--Fnción que filta la lista de encustas por la encuesta que desee el usuario
+filterForms ::  [[[String]]] -> String->  [[[String]]]
+filterForms x f = do
+    let y = map(\d ->filterByNameForm d f ) x
     let z =  filter (\e -> e/=[]) y
     z
 
+    --        preguntas       encuesta indice   respuestas
+answerForm :: [[[String]]] -> [[[String]]] ->  IO[[[String]]]
+answerForm x  z = do
+    if(x) /= []
+        then do
+             print x 
+             let question = x !! 0
+             let varQuestion = question !! 0
+             let varAnswers = question !! 1
+             let showOptions = zip [1..(length varAnswers)] varAnswers
+             print (varQuestion !! 1)
+             print "Ingrese el numero de la respuesta que desea"
+             print showOptions
+             answers <- input
+             let inputAnswers = read answers :: Int
+             let realAnswer =  (inputAnswers - 1)
+             let selectAnswer = varAnswers !! realAnswer
+             let listAnswer = varQuestion ++ [selectAnswer] 
+             let complete = z ++ [[listAnswer]]
+             answerForm (tail x)  complete
+        else return z
+
+
+
+selectForm ::Int-> [[[String]]] -> [[[String]]] -> IO[[[String]]]
+selectForm x y z  = do
+    if(x) /= 0
+        then do 
+           print "Cual encuesta desea contestar?"
+           selectFormVar <- input
+           let questionsForForms = filterForms y selectFormVar
+           let answersIO = answerForm questionsForForms    []
+           answers <- (answersIO)
+           let fullAnswers = z ++ answers
+           print "Desea contestar otra encuesta? 1 para si o 0 para no"  
+           varInput <- input 
+           let varCondicion = read varInput :: Int
+           selectForm varCondicion y fullAnswers
+        else return z
 
 main :: IO ()
 main = do
-     --let forms = addFormsNames 1 " " []
-    --x <- (forms)
-    let f = "e2"
---    let y = map(\x ->prueba x f ) listaquemada
-    let y = prueba3 listaquemada f
-    print listaquemada
-    print y
+    
+    let forms = addFormsNames 1 " " []
+    x <- (forms)
+    let y = selectForm 1 x []
+    xd <- (y)
+    print xd
 
 
 
