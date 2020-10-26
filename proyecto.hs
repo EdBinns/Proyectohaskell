@@ -1,6 +1,10 @@
+--import System.Random
+
 listaquemada :: [[[String]]]
 listaquemada = [[["e1","p1"],["r1","r2","r3","r4","r5"]],[["e1","p2"],["r1","r2"]],[["e2","p1"],["r1","r2","r3","r4","r5"]],[["e2","p2"],["r1","r2"]]]
     
+listaquemadaRespuestas ::[[[String]]]
+listaquemadaRespuestas = [[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]]]
 ---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
@@ -124,7 +128,7 @@ filterForms x f = do
     filter (\e -> e/=[]) y
     
 --Función que se encarga de que el usuario conteste todas las encuestas
-answerForm :: [[[String]]] -> [[[String]]] ->  IO[[[String]]]
+answerForm :: [[[String]]] -> [[String]] ->  IO[[String]]
 answerForm x  z = do
     if(x) /= []
         then do
@@ -141,7 +145,7 @@ answerForm x  z = do
              let realAnswer =  (inputAnswers - 1)
              let selectAnswer = varAnswers !! realAnswer
              let listAnswer = varQuestion ++ [selectAnswer] 
-             let complete = z ++ [[listAnswer]]
+             let complete = z ++ [listAnswer]
              answerForm (tail x)  complete
         else return z
 
@@ -155,26 +159,20 @@ selectForm x y z  = do
            let questionsForForms = filterForms y selectFormVar
            let answersIO = answerForm questionsForForms    []
            answers <- (answersIO)
-           let fullAnswers = z ++ answers
+           let fullAnswers = z ++ [answers]
            print "Desea contestar otra encuesta? 1 para si o 0 para no"  
            varInput <- input 
            let varCondicion = read varInput :: Int
            selectForm varCondicion y fullAnswers
         else return z
 
+--answerAutomatic :: [[[String]]] -> 
+
+--mostAnsweredSurvey
 main :: IO ()
 main = do
-   
     let forms = addFormsNames 1 " " []
     x <- (forms)
     let y = selectForm 1 x []
-    xd <- (y)
-    print xd
-
-
-
- 
- 
-
-    
-    
+    answers <- (y)
+    print (answers) 
