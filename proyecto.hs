@@ -4,7 +4,7 @@ listaquemada :: [[[String]]]
 listaquemada = [[["e1","p1"],["r1","r2","r3","r4","r5"]],[["e1","p2"],["r1","r2"]],[["e2","p1"],["r1","r2","r3","r4","r5"]],[["e2","p2"],["r1","r2"]]]
     
 listaquemadaRespuestas ::[[[String]]]
-listaquemadaRespuestas = [[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]]]
+listaquemadaRespuestas = [[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]],[["e1","p1","r1"],["e1","p2","r2"]]]
 ---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
@@ -168,11 +168,30 @@ selectForm x y z  = do
 
 --answerAutomatic :: [[[String]]] -> 
 
---mostAnsweredSurvey
+--[[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]]]
+howManyTimesWasAFormAnswered :: [[[String]]]->String-> Int
+howManyTimesWasAFormAnswered x y=do
+    let z = map(\d -> verifyAnwers d y) x
+    length (filter (\e -> e/=[]) z)
+
+verifyAnwers :: [[String]] -> String-> [[String]]
+verifyAnwers x y= do
+    let z = (x !! 0) !! 0
+    if(z) == y
+        then 
+             x 
+        else []   
+
+contQuestions :: [[[String]]] -> String -> Int
+contQuestions x y= do
+    length (filterForms x y)
+
 main :: IO ()
 main = do
-    let forms = addFormsNames 1 " " []
-    x <- (forms)
-    let y = selectForm 1 x []
-    answers <- (y)
-    print (answers) 
+    --let forms = addFormsNames 1 " " []
+    --x <- (forms)
+    --let y = selectForm 1 x []
+    --answers <- (y)
+    print "adios"
+    
+    
