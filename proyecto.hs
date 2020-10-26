@@ -121,7 +121,7 @@ selectByNameForm x y =
         else
             []
 
---Fnción que filta la lista de encustas por la encuesta que desee el usuario
+--Función que filta la lista de encuestas por la encuesta que desee el usuario
 filterForms ::  [[[String]]] -> String->  [[[String]]]
 filterForms x f = do
     let y = map(\d ->filterByNameForm d f ) x
@@ -191,12 +191,46 @@ contQuestions x y= do
 totalAnsweredForms::  [[[String]]]-> Int
 totalAnsweredForms x = length(x)  
 
+statisticsMenu ::  [[[String]]] -> [[[String]]] -> Int ->IO()
+statisticsMenu x z y= do
+    if(y) /= 0
+        then do
+            print "Elija cual estadistica quiere ver:"
+            print "1- Las veces que se contesto una encuesta"
+            print "2- El total de preguntas de una encuesta"
+            print "3- El total de encuestas realizadas"
+            selectStad <- input
+            let realSelect = read selectStad ::Int
+            opcionsStadistics  realSelect x z
+            print "Desea volver a ver las estadisticas? (1 si, 0 no)"
+            varInput <- input
+            let varCondicion = read varInput ::Int
+            statisticsMenu x z varCondicion 
+        else print"Programa finalizado"
+
+
+opcionsStadistics::Int ->  [[[String]]] -> [[[String]]] -> IO()
+opcionsStadistics x y z
+       | x == 1 = do 
+           print "Ingrese el nombre de la encuesta que desea ver esta estadistica"
+           selectForm <- input
+           print "El total de veces que una encuesta se contesto es de:"
+           print(howManyTimesWasAFormAnswered y selectForm )
+       | x == 2 = do
+           print "Ingrese el nombre de la encuesta que desea ver esta estadistica"
+           selectForm <- input
+           print "El total de preguntas de la encuesta son de: "
+           print(contQuestions z selectForm )
+       | x == 3 = do 
+           print "El total de encuestas realizadas es de:  "
+           print(totalAnsweredForms y )
+                     
 main :: IO ()
 main = do
     --let forms = addFormsNames 1 " " []
     --x <- (forms)
     --let y = selectForm 1 x []
     --answers <- (y)
-    print (totalAnsweredForms listaquemadaRespuestas)
+    statisticsMenu  listaquemadaRespuestas listaquemada 1
     
     
