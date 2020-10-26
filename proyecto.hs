@@ -1,20 +1,13 @@
 listaquemada :: [[[String]]]
 listaquemada = [[["e1","p1"],["r1","r2","r3","r4","r5"]],[["e1","p2"],["r1","r2"]],[["e2","p1"],["r1","r2","r3","r4","r5"]],[["e2","p2"],["r1","r2"]]]
     
----Función que agrega nuevas respuestas a una lista
-addAnswers ::  String -> [String] -> [String]
-addAnswers x y  = y ++ [x]
-
-
 ---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
 
-
 ---Función que agrega nuevas encuestas a una lista
 addForms ::  String -> [String] -> [String]
 addForms x y  = y++ [x]
-
 
 ---Función que agrega la encuesta completa a una lista
 addCompleteForm :: [String]-> [String] -> [[[String]]]
@@ -43,7 +36,8 @@ addFormsNames x y z =  do
             let varCondicion = read varInput :: Int
             addFormsNames varCondicion y completeForms
         else return  z
----Agregar preguntas
+
+---Función que se encarga de generar preguntas
 generateQuestions :: Int -> String ->[[[String]]] -> IO [[[String]]]
 generateQuestions x y z= do 
    if (x) /= 0
@@ -114,7 +108,6 @@ filterByNameForm x y= do
          else 
            [nameForm] ++ [x !! 1]    
   
-
 --Verifica que preguntas le pertenecen a la encuesta seleccionada
 selectByNameForm ::  [String] -> String-> [String]
 selectByNameForm x y = 
@@ -128,10 +121,9 @@ selectByNameForm x y =
 filterForms ::  [[[String]]] -> String->  [[[String]]]
 filterForms x f = do
     let y = map(\d ->filterByNameForm d f ) x
-    let z =  filter (\e -> e/=[]) y
-    z
-
-    --        preguntas       encuesta indice   respuestas
+    filter (\e -> e/=[]) y
+    
+--Función que se encarga de que el usuario conteste todas las encuestas
 answerForm :: [[[String]]] -> [[[String]]] ->  IO[[[String]]]
 answerForm x  z = do
     if(x) /= []
@@ -153,8 +145,7 @@ answerForm x  z = do
              answerForm (tail x)  complete
         else return z
 
-
-
+--Función que le pregunta al usuario que preguntas desea contestar
 selectForm ::Int-> [[[String]]] -> [[[String]]] -> IO[[[String]]]
 selectForm x y z  = do
     if(x) /= 0
@@ -173,7 +164,7 @@ selectForm x y z  = do
 
 main :: IO ()
 main = do
-    
+   
     let forms = addFormsNames 1 " " []
     x <- (forms)
     let y = selectForm 1 x []
