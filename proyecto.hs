@@ -168,7 +168,7 @@ selectForm x y z  = do
 
 --answerAutomatic :: [[[String]]] -> 
 
---[[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]]]
+--Estadistica que nos dice cuantas veces se realizo una encuesta
 howManyTimesWasAFormAnswered :: [[[String]]]->String-> Int
 howManyTimesWasAFormAnswered x y=do
     let z = map(\d -> verifyAnwers d y) x
@@ -182,9 +182,14 @@ verifyAnwers x y= do
              x 
         else []   
 
+--Me genera la cantidad de preguntas que tiene una encuesta
 contQuestions :: [[[String]]] -> String -> Int
 contQuestions x y= do
     length (filterForms x y)
+
+--Me genera el total de encuestas contestadas
+totalAnsweredForms::  [[[String]]]-> Int
+totalAnsweredForms x = length(x)  
 
 main :: IO ()
 main = do
@@ -192,6 +197,6 @@ main = do
     --x <- (forms)
     --let y = selectForm 1 x []
     --answers <- (y)
-    print "adios"
+    print (totalAnsweredForms listaquemadaRespuestas)
     
     
