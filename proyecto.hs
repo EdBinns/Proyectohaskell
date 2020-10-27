@@ -32,6 +32,7 @@ addFormsNames x y z =  do
             showMessage message
             newName <- input
             print "Seguidamente va a agregar las preguntas"
+            print "======================================"
             let forms = generateQuestions 1 newName [] 
             formsLists <- (forms)
             let completeForms = z ++ formsLists
@@ -46,7 +47,7 @@ generateQuestions :: Int -> String ->[[[String]]] -> IO [[[String]]]
 generateQuestions x y z= do 
    if (x) /= 0
         then do
-            showMessage "Ingrese 1 para que sea de tipo escalar o 2 para que sea de selección unica"
+            showMessage "Ingrese 1 para que sea de tipo escalar o 2 para que sea de seleccion unica"
             questionType <- input
             showMessage "Ingrese la pregunta o titulo que desee"
             newQuestion <- input
@@ -147,6 +148,8 @@ answerForm x  z = do
              let complete = z ++ [listAnswer]
              answerForm (tail x)  complete
         else return z
+
+--Funcion que permite responder automaticamente una encuesta
 answerAutomatic :: [[[String]]] -> [[String]] ->  IO[[String]]
 answerAutomatic x  z = do
     if(x) /= []
@@ -160,6 +163,7 @@ answerAutomatic x  z = do
              let complete = z ++ [listAnswer]
              answerAutomatic (tail x)  complete
         else return z
+
 --Función que le pregunta al usuario que preguntas desea contestar
 selectForm ::Int-> [[[String]]] -> [[[String]]] -> IO[[[String]]]
 selectForm x y z  = do
@@ -215,11 +219,13 @@ contQuestions x y= do
 totalAnsweredForms::  [[[String]]]-> Int
 totalAnsweredForms x = length(x)  
 
+-- Menu para que el usuario puede escoger que estadisticas quiere ver
 statisticsMenu ::  [[[String]]] -> [[[String]]] -> Int ->IO()
 statisticsMenu x z y= do
     if(y) /= 0
         then do
             print "Elija cual estadistica quiere ver:"
+            print "=================================="
             print "1- Las veces que se contesto una encuesta"
             print "2- El total de preguntas de una encuesta"
             print "3- El total de encuestas realizadas"
@@ -232,24 +238,27 @@ statisticsMenu x z y= do
             statisticsMenu x z varCondicion 
         else print"Programa finalizado"
 
-
+--En esta función nos muestra las posibles opciones para las estadisticas
 opcionsStadistics::Int ->  [[[String]]] -> [[[String]]] -> IO()
 opcionsStadistics x y z
        | x == 1 = do 
+           print "==================================" 
            print "Ingrese el nombre de la encuesta que desea ver esta estadistica"
            selectForm <- input
            print "El total de veces que una encuesta se contesto es de:"
            print(howManyTimesWasAFormAnswered y selectForm )
        | x == 2 = do
+           print "==================================" 
            print "Ingrese el nombre de la encuesta que desea ver esta estadistica"
            selectForm <- input
            print "El total de preguntas de la encuesta son de: "
            print(contQuestions z selectForm )
        | x == 3 = do 
+           print "==================================" 
            print "El total de encuestas realizadas es de:  "
            print(totalAnsweredForms y )
 
-
+--Mwnu general del sistema 
 menuSystem:: [[[String]]]-> [[[String]]]->IO()
 menuSystem  listForms listAnswers = do
      print "Bienvenido al sistema de encuestas"
@@ -260,7 +269,8 @@ menuSystem  listForms listAnswers = do
      print "1-Generar encuestas"
      print "2-Contestar encuestas"
      print "3-Ver estadisticas"
-     print "4-Salir"
+     print "4-Guardar las encuestas y respuestas"
+     print "5-Salir"
      item <- input
      let itemMenu = read item :: Int
      if(itemMenu) == 1
@@ -279,21 +289,28 @@ menuSystem  listForms listAnswers = do
                menuSystem listForms union
      else if(itemMenu) == 3           
          then do
+            print "=================================="
             statisticsMenu   listAnswers listForms 1
             print "=================================="
             menuSystem listForms listAnswers
+     else if(itemMenu) == 4           
+         then do
+            print "==================================" 
+            print "Se esta guardando la lista de encuestas" 
+            mapM_ (appendFile "forms.txt" . show) [listForms]
+            print "Guardada completamente"
+            print "=================================="
+            print "Se esta guardando la lista de respuestas" 
+            mapM_ (appendFile "answers.txt" . show) [listAnswers]
+            print "Guardada completamente"
+            print "=================================="
+            menuSystem listForms listAnswers       
      else do
          print("Muchas gracias por su participacion")        
          print "=================================="   
-
+--Funcion principal del progrma
 main :: IO ()
 main = do
-   -- let forms = addFormsNames 1 " " []
-    --formsList <- (forms)
-    --let y = selectForm 1 listaquemada []
-    --answers <- (y)
-    --statisticsMenu  answers formsList 1
-    --print answers
-    menuSystem [] []
+    menuSystem listaquemada listaquemadaRespuestas
     
     
