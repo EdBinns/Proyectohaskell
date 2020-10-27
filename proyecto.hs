@@ -176,7 +176,6 @@ selectForm x y z  = do
                     let answersIO = answerForm questionsForForms  []
                     answers <- (answersIO)
                     let fullAnswers = z ++ [answers]
-                    print fullAnswers
                     print "Desea contestar otra encuesta? (1 si,0 no)"  
                     varInput <- input 
                     let varCondicion = read varInput :: Int
@@ -185,7 +184,6 @@ selectForm x y z  = do
                     let answersIO = answerAutomatic questionsForForms  []
                     answers <- (answersIO)
                     let fullAnswers = z ++ [answers]
-                    print fullAnswers
                     print "Desea contestar otra encuesta? (1 si,0 no)"  
                     varInput <- input 
                     let varCondicion = read varInput :: Int
@@ -250,14 +248,52 @@ opcionsStadistics x y z
        | x == 3 = do 
            print "El total de encuestas realizadas es de:  "
            print(totalAnsweredForms y )
-                     
+
+
+menuSystem:: [[[String]]]-> [[[String]]]->IO()
+menuSystem  listForms listAnswers = do
+     print "Bienvenido al sistema de encuestas"
+     print "=================================="
+     print "                                  "
+     print "Marque que opcion desea"
+     print "=================================="
+     print "1-Generar encuestas"
+     print "2-Contestar encuestas"
+     print "3-Ver estadisticas"
+     print "4-Salir"
+     item <- input
+     let itemMenu = read item :: Int
+     if(itemMenu) == 1
+         then do
+             print "=================================="
+             let forms = addFormsNames 1 " " listForms
+             formsList <- (forms)
+             print "=================================="
+             menuSystem formsList listAnswers
+     else if(itemMenu) == 2
+         then do
+               let y = selectForm 1 listForms []
+               answers <- (y)
+               let union = listAnswers ++ answers
+               print "=================================="
+               menuSystem listForms union
+     else if(itemMenu) == 3           
+         then do
+            statisticsMenu   listAnswers listForms 1
+            print "=================================="
+            menuSystem listForms listAnswers
+     else do
+         print("Muchas gracias por su participacion")        
+         print "=================================="   
+
 main :: IO ()
 main = do
-    let forms = addFormsNames 1 " " []
-    x <- (forms)
-    let y = selectForm 1 listaquemada []
-    answers <- (y)
-    statisticsMenu  answers x 1
-    print answers
+   -- let forms = addFormsNames 1 " " []
+    --formsList <- (forms)
+    --let y = selectForm 1 listaquemada []
+    --answers <- (y)
+    --statisticsMenu  answers formsList 1
+    --print answers
+    menuSystem [] []
     
     
