@@ -1,11 +1,8 @@
---import System.Random
 
 listaquemada :: [[[String]]]
-listaquemada = [[["e1","p1"],["r1","r2","r3","r4","r5"]],[["e1","p2"],["r1","r2"]],[["e2","p1"],["r1","r2","r3","r4","r5"]],[["e2","p2"],["r1","r2"]]]
-    
+listaquemada =[[["Gobierno","Rendimiento del gobierno"],["Muy Malo","Malo","Regular","Bueno","Excelente"]],[["Gobierno","El mandato de Carlos Alvarado fue bueno?"],["Si","No"]],[["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?"],["No estoy para nada de acuerdo","No estoy de acuerdo con ciertas acciones","No estuvieron mal","Concuerdo con ciertas acciones","Estoy totalmente de acuerdo"]], [["Uber","Con cuanta frecuencia viaja con nosotros?"],["Diario","Dia por medio","Cada tres dias","Semanal","Mensual"]],[["Uber","establece tu nivel de satisfacción con los viajes"],["Muy insatisfecho","Insatisfecho", "Neutral","Satisfecho","Muy satisfecho"]],[["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada"],["Si, esta bien", "Puede mejorar", "No, siento que le hace falta"]]]    
 listaquemadaRespuestas ::[[[String]]]
-listaquemadaRespuestas = [[["e1","p1","r1"],["e1","p2","r2"]],[["e2","p1","r1"],["e2","p2","r2"]],[["e1","p1","r1"],["e1","p2","r2"]]]
----Función que agrega nuevas preguntas a una lista:
+listaquemadaRespuestas = [[["Gobierno","Rendimiento del gobierno","Regular"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","Si"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","Concuerdo con ciertas acciones"]],[["Gobierno","Rendimiento del gobierno","Malo"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","No"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","No estoy para nada de acuerdo"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Cada tres dias"],["Uber","establece tu nivel de satisfacción con los viajes","Neutral"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Si, esta bien"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Diario"],["Uber","establece tu nivel de satisfacción con los viajes","Satisfecho"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Puede mejorar"]]]---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
 
