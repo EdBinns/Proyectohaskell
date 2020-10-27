@@ -132,7 +132,6 @@ answerForm :: [[[String]]] -> [[String]] ->  IO[[String]]
 answerForm x  z = do
     if(x) /= []
         then do
-             print x 
              let question = x !! 0
              let varQuestion = question !! 0
              let varAnswers = question !! 1
@@ -159,7 +158,7 @@ answerAutomatic x  z = do
              let selectAnswer = varAnswers !! realAnswer
              let listAnswer = varQuestion ++ [selectAnswer] 
              let complete = z ++ [listAnswer]
-             answerForm (tail x)  complete
+             answerAutomatic (tail x)  complete
         else return z
 --Función que le pregunta al usuario que preguntas desea contestar
 selectForm ::Int-> [[[String]]] -> [[[String]]] -> IO[[[String]]]
@@ -177,6 +176,7 @@ selectForm x y z  = do
                     let answersIO = answerForm questionsForForms  []
                     answers <- (answersIO)
                     let fullAnswers = z ++ [answers]
+                    print fullAnswers
                     print "Desea contestar otra encuesta? (1 si,0 no)"  
                     varInput <- input 
                     let varCondicion = read varInput :: Int
@@ -185,6 +185,7 @@ selectForm x y z  = do
                     let answersIO = answerAutomatic questionsForForms  []
                     answers <- (answersIO)
                     let fullAnswers = z ++ [answers]
+                    print fullAnswers
                     print "Desea contestar otra encuesta? (1 si,0 no)"  
                     varInput <- input 
                     let varCondicion = read varInput :: Int
@@ -254,9 +255,9 @@ main :: IO ()
 main = do
     let forms = addFormsNames 1 " " []
     x <- (forms)
-    let y = selectForm 1 x []
+    let y = selectForm 1 listaquemada []
     answers <- (y)
     statisticsMenu  answers x 1
-    print " "
+    print answers
     
     
