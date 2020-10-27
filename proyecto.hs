@@ -35,7 +35,7 @@ addFormsNames x y z =  do
             let forms = generateQuestions 1 newName [] 
             formsLists <- (forms)
             let completeForms = z ++ formsLists
-            print("Quiere agregar otra Encuesta? 1 para si y 0 para no")
+            print("Quiere agregar otra Encuesta?(1 si,0 no)")
             varInput <- input
             let varCondicion = read varInput :: Int
             addFormsNames varCondicion y completeForms
@@ -59,7 +59,7 @@ generateQuestions x y z= do
                        unique <- (questionsIO)
                        let completeForm = addCompleteForm questionAndNameFormList unique
                        let concatList = z ++ completeForm
-                       print("Quiere agregar otra pregunta? 1 para si y 0 para no")
+                       print("Quiere agregar otra pregunta? (1 si,0 no)")
                        varInput <- input
                        let varCondicion = read varInput :: Int
                        generateQuestions varCondicion y concatList
@@ -68,7 +68,7 @@ generateQuestions x y z= do
                        scaleAnsers <- (questionsIO)
                        let completeForm = addCompleteForm questionAndNameFormList scaleAnsers
                        let concatList = z ++ completeForm
-                       print("Quiere agregar otra pregunta? 1 para si y 0 para no")
+                       print("Quiere agregar otra pregunta? (1 si,0 no)")
                        varInput <- input
                        let varCondicion = read varInput :: Int
                        generateQuestions varCondicion y concatList
@@ -79,11 +79,11 @@ addUniqueSelection ::Int -> String -> [String]-> IO [String]
 addUniqueSelection x y z =  do
      if (x) /= 0
         then do
-            let message = "Ingrese su primer respuesta para la pregunta de " ++ y 
+            let message = "Ingrese  respuesta para la pregunta de " ++ y 
             showMessage message
             newQuestion <- input
             let newQuestionsList = addQuestions newQuestion z
-            print("Quiere agregar otra respuesta? 1 para si y 0 para no")
+            print("Quiere agregar otra respuesta? (1 si,0 no)")
             varInput <- input
             let varCondicion = read varInput :: Int
             addUniqueSelection varCondicion y newQuestionsList
@@ -95,7 +95,7 @@ addScaleQuestions ::Int -> String -> [String]-> IO [String]
 addScaleQuestions x y z = do
      if (x) < 5
         then do
-            let message = "Ingrese su primer respuesta para la pregunta de " ++ y 
+            let message = "Ingrese respuesta para la pregunta de " ++ y 
             showMessage message
             newQuestion <- input
             let newQuestionsList = addQuestions newQuestion z
@@ -148,7 +148,19 @@ answerForm x  z = do
              let complete = z ++ [listAnswer]
              answerForm (tail x)  complete
         else return z
-
+answerAutomatic :: [[[String]]] -> [[String]] ->  IO[[String]]
+answerAutomatic x  z = do
+    if(x) /= []
+        then do
+             let question = x !! 0
+             let varQuestion = question !! 0
+             let varAnswers = question !! 1
+             let realAnswer =  0
+             let selectAnswer = varAnswers !! realAnswer
+             let listAnswer = varQuestion ++ [selectAnswer] 
+             let complete = z ++ [listAnswer]
+             answerForm (tail x)  complete
+        else return z
 --Función que le pregunta al usuario que preguntas desea contestar
 selectForm ::Int-> [[[String]]] -> [[[String]]] -> IO[[[String]]]
 selectForm x y z  = do
@@ -156,17 +168,30 @@ selectForm x y z  = do
         then do 
            print "Cual encuesta desea contestar?"
            selectFormVar <- input
+           print "Desea contestarla de forma automatica o manual?  (1 automatica,0 manual)"
+           typeInput <- input
+           let typeAnswer = read typeInput :: Int
            let questionsForForms = filterForms y selectFormVar
-           let answersIO = answerForm questionsForForms    []
-           answers <- (answersIO)
-           let fullAnswers = z ++ [answers]
-           print "Desea contestar otra encuesta? 1 para si o 0 para no"  
-           varInput <- input 
-           let varCondicion = read varInput :: Int
-           selectForm varCondicion y fullAnswers
+           if(typeAnswer) == 0
+               then do
+                    let answersIO = answerForm questionsForForms  []
+                    answers <- (answersIO)
+                    let fullAnswers = z ++ [answers]
+                    print "Desea contestar otra encuesta? (1 si,0 no)"  
+                    varInput <- input 
+                    let varCondicion = read varInput :: Int
+                    selectForm varCondicion y fullAnswers
+                else do
+                    let answersIO = answerAutomatic questionsForForms  []
+                    answers <- (answersIO)
+                    let fullAnswers = z ++ [answers]
+                    print "Desea contestar otra encuesta? (1 si,0 no)"  
+                    varInput <- input 
+                    let varCondicion = read varInput :: Int
+                    selectForm varCondicion y fullAnswers
         else return z
 
---answerAutomatic :: [[[String]]] -> 
+
 
 --Estadistica que nos dice cuantas veces se realizo una encuesta
 howManyTimesWasAFormAnswered :: [[[String]]]->String-> Int
@@ -202,7 +227,7 @@ statisticsMenu x z y= do
             selectStad <- input
             let realSelect = read selectStad ::Int
             opcionsStadistics  realSelect x z
-            print "Desea volver a ver las estadisticas? (1 si, 0 no)"
+            print "Desea volver a las estadisticas? (1 si, 0 no)"
             varInput <- input
             let varCondicion = read varInput ::Int
             statisticsMenu x z varCondicion 
@@ -227,10 +252,11 @@ opcionsStadistics x y z
                      
 main :: IO ()
 main = do
-    --let forms = addFormsNames 1 " " []
-    --x <- (forms)
-    --let y = selectForm 1 x []
-    --answers <- (y)
-    statisticsMenu  listaquemadaRespuestas listaquemada 1
+    let forms = addFormsNames 1 " " []
+    x <- (forms)
+    let y = selectForm 1 x []
+    answers <- (y)
+    statisticsMenu  answers x 1
+    print " "
     
     
