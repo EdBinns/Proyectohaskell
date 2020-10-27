@@ -1,8 +1,8 @@
 
-listaquemada :: [[[String]]]
-listaquemada =[[["Gobierno","Rendimiento del gobierno"],["Muy Malo","Malo","Regular","Bueno","Excelente"]],[["Gobierno","El mandato de Carlos Alvarado fue bueno?"],["Si","No"]],[["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?"],["No estoy para nada de acuerdo","No estoy de acuerdo con ciertas acciones","No estuvieron mal","Concuerdo con ciertas acciones","Estoy totalmente de acuerdo"]], [["Uber","Con cuanta frecuencia viaja con nosotros?"],["Diario","Dia por medio","Cada tres dias","Semanal","Mensual"]],[["Uber","establece tu nivel de satisfacción con los viajes"],["Muy insatisfecho","Insatisfecho", "Neutral","Satisfecho","Muy satisfecho"]],[["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada"],["Si, esta bien", "Puede mejorar", "No, siento que le hace falta"]]]    
-listaquemadaRespuestas ::[[[String]]]
-listaquemadaRespuestas = [[["Gobierno","Rendimiento del gobierno","Regular"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","Si"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","Concuerdo con ciertas acciones"]],[["Gobierno","Rendimiento del gobierno","Malo"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","No"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","No estoy para nada de acuerdo"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Cada tres dias"],["Uber","establece tu nivel de satisfacción con los viajes","Neutral"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Si, esta bien"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Diario"],["Uber","establece tu nivel de satisfacción con los viajes","Satisfecho"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Puede mejorar"]]]---Función que agrega nuevas preguntas a una lista:
+listaEncuestasQuemadas :: [[[String]]]
+listaEncuestasQuemadas =[[["Gobierno","Rendimiento del gobierno"],["Muy Malo","Malo","Regular","Bueno","Excelente"]],[["Gobierno","El mandato de Carlos Alvarado fue bueno?"],["Si","No"]],[["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?"],["No estoy para nada de acuerdo","No estoy de acuerdo con ciertas acciones","No estuvieron mal","Concuerdo con ciertas acciones","Estoy totalmente de acuerdo"]], [["Uber","Con cuanta frecuencia viaja con nosotros?"],["Diario","Dia por medio","Cada tres dias","Semanal","Mensual"]],[["Uber","establece tu nivel de satisfacción con los viajes"],["Muy insatisfecho","Insatisfecho", "Neutral","Satisfecho","Muy satisfecho"]],[["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada"],["Si, esta bien", "Puede mejorar", "No, siento que le hace falta"]]]    
+listaRespuestasQuemadas ::[[[String]]]
+listaRespuestasQuemadas = [[["Gobierno","Rendimiento del gobierno","Regular"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","Si"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","Concuerdo con ciertas acciones"]],[["Gobierno","Rendimiento del gobierno","Malo"],["Gobierno","El mandato de Carlos Alvarado fue bueno?","No"],["Gobierno","Que tan de acuerdo estacon las acciones del gobierno sobre las recientes huelgas?","No estoy para nada de acuerdo"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Cada tres dias"],["Uber","establece tu nivel de satisfacción con los viajes","Neutral"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Si, esta bien"]],[["Uber","Con cuanta frecuencia viaja con nosotros?","Diario"],["Uber","establece tu nivel de satisfacción con los viajes","Satisfecho"],["Uber","Crees que la relación entre la calidad y el precio del viaje fue la adecuada","Puede mejorar"]]]---Función que agrega nuevas preguntas a una lista:
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
 
@@ -266,8 +266,10 @@ menuSystem  listForms listAnswers = do
      print "1-Generar encuestas"
      print "2-Contestar encuestas"
      print "3-Ver estadisticas"
-     print "4-Guardar las encuestas y respuestas"
-     print "5-Salir"
+     print "4-Ver las encuestas"
+     print "5-Ver las respuestas"
+     print "6-Guardar las encuestas y respuestas"
+     print "7-Salir"
      item <- input
      let itemMenu = read item :: Int
      if(itemMenu) == 1
@@ -290,7 +292,22 @@ menuSystem  listForms listAnswers = do
             statisticsMenu   listAnswers listForms 1
             print "=================================="
             menuSystem listForms listAnswers
+    
      else if(itemMenu) == 4           
+         then do
+            print "==================================" 
+            print "Las encuestas existentes son las siguientes" 
+            print listForms
+            print "=================================="
+            menuSystem listForms listAnswers
+       else if(itemMenu) == 5           
+         then do
+            print "==================================" 
+            print "Las respuestas existentes son las siguientes" 
+            print listAnswers
+            print "=================================="
+            menuSystem listForms listAnswers      
+      else if(itemMenu) == 6           
          then do
             print "==================================" 
             print "Se esta guardando la lista de encuestas" 
@@ -301,13 +318,13 @@ menuSystem  listForms listAnswers = do
             mapM_ (appendFile "answers.txt" . show) [listAnswers]
             print "Guardada completamente"
             print "=================================="
-            menuSystem listForms listAnswers       
+            menuSystem listForms listAnswers                        
      else do
          print("Muchas gracias por su participacion")        
          print "=================================="   
 --Funcion principal del progrma
 main :: IO ()
 main = do
-    menuSystem listaquemada listaquemadaRespuestas
+    menuSystem listaEncuestasQuemadas listaRespuestasQuemadas
     
     
