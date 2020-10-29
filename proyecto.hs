@@ -6,16 +6,16 @@ listaRespuestasQuemadas = [[["Gobierno","Rendimiento del gobierno","Regular"],["
 addQuestions :: String -> [String] -> [String]
 addQuestions x y = y ++ [x]
 
----Función que agrega nuevas encuestas a una lista
-addForms ::  String -> [String] -> [String]
-addForms x y  = y++ [x]
+
 
 ---Función que agrega la encuesta completa a una lista
 addCompleteForm :: [String]-> [String] -> [[[String]]]
 addCompleteForm x y = [[x]++[y]]
+
 input ::  IO String
 input  = do
     getLine
+    
 --Función que permite imprimir un mensaje en pantalla
 showMessage :: String -> IO()
 showMessage  x = print  x
